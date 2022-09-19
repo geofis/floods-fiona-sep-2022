@@ -1,0 +1,21 @@
+<session>
+  <modelVersion>1.0.0</modelVersion>
+  <products>
+    <product>
+      <refNo>1</refNo>
+      <uri>S1A_IW_GRDH_1SDV_20200719T224503_20200719T224528_033530_03E2A5_C2BC.SAFE/manifest.safe</uri>
+      <productReaderPlugin>class org.esa.s1tbx.io.sentinel1.Sentinel1ProductReaderPlugIn</productReaderPlugin>
+    </product>
+    <product>
+      <refNo>2</refNo>
+      <uri>S1A_IW_GRDH_1SDV_20200731T224503_20200731T224528_033705_03E808_428B.SAFE/manifest.safe</uri>
+      <productReaderPlugin>class org.esa.s1tbx.io.sentinel1.Sentinel1ProductReaderPlugIn</productReaderPlugin>
+    </product>
+    <product>
+      <refNo>3</refNo>
+      <uri>S1A_IW_GRDH_1SDV_20200719_20200731_Stack.dim</uri>
+      <productReaderPlugin>class org.esa.snap.core.dataio.dimap.DimapProductReaderPlugIn</productReaderPlugin>
+    </product>
+  </products>
+  <views/>
+</session>

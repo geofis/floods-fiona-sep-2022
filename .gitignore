@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+raw/*
+geom_corrected/*
+SOURCE_clasificacion_randomforest.R
+classified/lclasifrf.tif
+classified/grass/*
