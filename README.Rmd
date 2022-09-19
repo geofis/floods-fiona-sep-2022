@@ -1,5 +1,5 @@
 ---
-title: "Flood map of Storm Isaias, East Dominican Republic, July 2020"
+title: "Flood map of Hurricane Fiona, East Dominican Republic, September 2022"
 output: github_document
 editor_options: 
   chunk_output_type: console
@@ -8,6 +8,13 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# TO BE UPDATED SOON
+
+```{r, echo=F}
+knitr::knit_exit()
+```
+
 
 ## Generate virtual raster
 
