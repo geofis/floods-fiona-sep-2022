@@ -1,5 +1,31 @@
-Flood map of Hurricane Fiona, East Dominican Republic, September 2022
+Flood map of Hurricane Fiona, East Dominican Republic, September 2022 /
+Mapa de inundación y encharcamiento tras el paso del huracán Fiona, este
+de República Dominicana, septiembre 2022
 ================
+
+## How to cite? / ¿Cómo citar?
+
+[![DOI](https://zenodo.org/badge/538619204.svg)](https://zenodo.org/badge/latestdoi/538619204)
+
+-   APA:
+
+José-Ramón Martínez-Batlle. (2022). geofis/floods-fiona-sep-2022: First
+release (v.0.0.0.9000). Zenodo. <https://doi.org/10.5281/zenodo.7098255>
+
+-   BibTex:
+
+<!-- -->
+
+    @software{jose_ramon_martinez_batlle_2022_7098255,
+      author       = {José-Ramón Martínez-Batlle},
+      title        = {geofis/floods-fiona-sep-2022: First release},
+      month        = sep,
+      year         = 2022,
+      publisher    = {Zenodo},
+      version      = {v.0.0.0.9000},
+      doi          = {10.5281/zenodo.7098255},
+      url          = {https://doi.org/10.5281/zenodo.7098255}
+    }
 
 ## Generate virtual raster
 
