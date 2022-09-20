@@ -6,29 +6,26 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval=FALSE)
 ```
-
-# TO BE UPDATED SOON
-
-```{r, echo=F}
-knitr::knit_exit()
-```
-
 
 ## Generate virtual raster
 
-```{bash, eval = F}
-gdalbuildvrt -separate geom_corrected/stack.vrt \
-  geom_corrected/S1A_IW_GRDH_1SDV_20200719_20200731_Stack_Spk_Orb_TC.data/*.img
+From QGIS or GDAL, use the following sequence: pre-VH, pre-VV, post-VH, post-VV.
+
+Something like this might also work:
+
+```{bash, eval=F}
+gdalbuildvrt -overwrite -resolution highest -separate -r nearest -input_file_list INPUTFILELIST.txt /tmp/processing_PMyLBb/dc8a8f13d9484bc080415d063aba9d4c/OUTPUT.vrt
 ```
+
 
 ## Create training sites in QGIS using the multiband visualization layer (flooded-blue)
 
 
 ##Run the classification algorithm
 
-```{r, warning=F, message=F}
+```{r, warning=F, message=F, eval=T}
 library(rgdal)
 library(gdalUtils)
 library(raster)
@@ -39,11 +36,12 @@ library(randomForest)
 
 ```{r, eval=F}
 #PREPARANDO DATOS PARA CLASIFICACION
-img <- brick('geom_corrected/stack.vrt')
-names(img) <- c('VH_20200719_T2245UTC','VH_20200731_T2245UTC','VV_20200719_T2245UTC','VV_20200731_T2245UTC')
+# img <- brick('geom_corrected/stack.vrt')
+img <- brick('geom_corrected/stack_despeckled.vrt')
+names(img) <- c('pre_vh','pre_vv','post_vh','post_vv')
 img
 #TRSITES
-trdata <- readOGR('trsites/trsites.geojson', stringsAsFactors=T)
+trdata <- readOGR('trsites/trsites_32619.shp', stringsAsFactors=T)
 columnaresp <- 'tipo'
 #TABLA ENTRENAMIENTO
 dftodo <- data.frame(matrix(vector(), nrow = 0, ncol = length(names(img)) + 1))
@@ -65,15 +63,16 @@ sdftodo <- subset(dftodo[sample(1:nrow(dftodo), muestras), ])
 #head(sdftodo)
 #str(sdftodo)
 #sdftodo <- sdftodo[,c(2:4,7)]
-modelorf <- train(clase ~ VH_20200719_T2245UTC + VH_20200731_T2245UTC + VV_20200719_T2245UTC + VV_20200731_T2245UTC, method = "rf", sdftodo)
+modelorf <- train(clase ~ pre_vh + pre_vv + post_vh + post_vv, method = "rf", sdftodo)
 modelorf
+saveRDS(modelorf, 'modelorf.RDS')
 #PREDICCION SOBRE IMAGEN Y SUAVIZADO CON FILTRO MODAL VENTANA 3X3
 lclasifrf <- raster::predict(img, modelorf)
-writeRaster(lclasifrf, 'classified/lclasifrf.tif', drivername = 'GTiff')
-mf <- matrix(rep(1,25), nrow=5)
+writeRaster(lclasifrf, 'classified/lclasifrf.tif', drivername = 'GTiff', overwrite = TRUE)
+mf <- matrix(rep(1, 9), nrow=3)
 mf
 lclasifrffm <- focal(lclasifrf, mf, modal)
-writeRaster(lclasifrffm, 'classifiedlclasifrffm.tif', drivername='GTiff')
+writeRaster(lclasifrffm, 'classified/lclasifrffm.tif', drivername='GTiff', overwrite = TRUE)
 ```
 
 ## Post-processing
@@ -82,12 +81,14 @@ writeRaster(lclasifrffm, 'classifiedlclasifrffm.tif', drivername='GTiff')
 - Imported the raster `lclasifrf.tif` into it
 - Converted the raster to vector (file: `classified.gpkg`)
 
-```{r}
-flooded <- readOGR('classified.gpkg')
+```{r, eval=T}
+flooded <- readOGR('classified/clasificado_para_lm.gpkg')
 plot(flooded)
 ```
 
-EN: Tropical storm Isaias: flooded areas, Northeast Dominican Republic, as of 31 de julio, 2020, 6 pm local time
-SP: Tormenta tropical Isaias: zonas inundadas, Nordeste República Dominicana, al 31 de julio de 2020, 6 pm hora local
+EN: Hurricane Fiona: flooded areas, East and Northeast Dominican Republic, as of 19 de September, 2022, 7 pm local time
+ES: Huracán Fiona: zonas inundadas y encharcadas, Este y Nordeste de República Dominicana, al 19 de septiembte de 2022, 7 pm hora local
 
-![](gif/gif.gif)
+![](gif/v1/gif.gif)
+![](gif/v2/gif.gif)
+
